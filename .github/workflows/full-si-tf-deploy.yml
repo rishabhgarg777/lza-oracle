@@ -1,6 +1,27 @@
 name: Deploy Single Instance Oracle DB on Azure with Terraform and Ansible
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      az_location:
+        description: "Location of Azure resources"
+        required: true
+        default: "eastus"
+      az_rg_basename:
+        description: "to your preferred resource group name."
+        required: false
+        default: "Oracle-test"
+      orcl_db_name:
+        description: "to what the database will be named"
+        required: false
+        default: "ORCL"
+      software_rg:
+        description: "to the resource group where the user assigned identity created to access the storage account with Oracle binaries is placed"
+        required: true
+        default: "binaryresource"
+      user_assigned_identity:
+        description: "to the name of the user assigned identity created to access the storage account with Oracle binaries"
+        required: true
+        default: "oraclelza"
   push:
     branches: [ main ]
     paths:
@@ -18,11 +39,11 @@ on:
     
 env:
   TF_LOG: ${{ vars.TF_LOG != '' && vars.TF_LOG || 'INFO' }}                                                     #"INFO"
-  AZ_LOCATION: ${{ vars.AZ_LOCATION != '' && vars.AZ_LOCATION || 'swedencentral' }}                             #"swedencentral" # can be parameterized
-  AZ_RG_BASENAME: ${{ vars.AZ_RG_BASENAME != '' && vars.AZ_RG_BASENAME || 'Oracle-test' }}                      #"Oracle-test" # can be parameterized
-  ORCL_DB_NAME: ${{ vars.ORCL_DB_NAME != '' && vars.ORCL_DB_NAME || 'ORCL' }}                                   #"ORCL" # can be parameterized
-  SOFTWARE_RG:  ${{ vars.SOFTWARE_RG != '' && vars.SOFTWARE_RG || 'binaryresource' }}                           #"binaryresource"
-  USER_ASSIGNED_IDENTITY: ${{vars.USER_ASSIGNED_IDENTITY != '' && vars.USER_ASSIGNED_IDENTITY || 'oraclelza' }} #"oraclelza"
+  AZ_LOCATION: ${{ github.event.inputs.az_location }}                             #"swedencentral" # can be parameterized
+  AZ_RG_BASENAME: ${{ github.event.inputs.az_rg_basename }}                      #"Oracle-test" # can be parameterized
+  ORCL_DB_NAME: ${{ github.event.inputs.orcl_db_name }}                                   #"ORCL" # can be parameterized
+  SOFTWARE_RG:  ${{ github.event.inputs.software_rg }}                           #"binaryresource"
+  USER_ASSIGNED_IDENTITY: ${{ github.event.inputs.user_assigned_identity }} #"oraclelza"
 
 permissions:
   id-token: write
