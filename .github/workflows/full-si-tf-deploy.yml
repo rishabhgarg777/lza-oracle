@@ -5,11 +5,11 @@ on:
       az_location:
         description: "Location of Azure resources"
         required: true
-        default: "eastus"
+        default: "centralindia"
       az_rg_basename:
         description: "to your preferred resource group name."
         required: false
-        default: "Oracle-test"
+        default: "OracleDeployment"
       orcl_db_name:
         description: "to what the database will be named"
         required: false
@@ -17,11 +17,11 @@ on:
       software_rg:
         description: "to the resource group where the user assigned identity created to access the storage account with Oracle binaries is placed"
         required: true
-        default: "binaryresource"
+        default: "OracleDeployment"
       user_assigned_identity:
         description: "to the name of the user assigned identity created to access the storage account with Oracle binaries"
         required: true
-        default: "oraclelza"
+        default: "OracleDeployment"
   push:
     branches: [ main ]
     paths:
@@ -55,7 +55,6 @@ jobs:
   terraform:
     name: '🔧 Terraform'
     runs-on: ubuntu-latest
-    environment: test-deploy
     strategy:
       fail-fast: false
   
