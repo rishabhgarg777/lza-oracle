@@ -290,6 +290,11 @@ jobs:
             Start-AzJitNetworkAccessPolicy -ResourceId "/subscriptions/${{env.SubscriptionID}}/resourceGroups/${{env.ResourceGroupName}}/providers/Microsoft.Security/locations/${{env.AZ_LOCATION}}/jitNetworkAccessPolicies/JIT-SSH-Policy" -VirtualMachine $JitPolicyArr
           azPSVersion: "latest"
 
+      - name: Sleep for 2 minutes before checking for SSH.
+        uses: juliangruber/sleep-action@v2.0.3
+        with:
+          time: 120s
+
       - name: 🧮 Get Known Hosts parameter using ssh-keyscan
         run: ssh-keyscan -T 300 -H ${{env.VM_Public_IP_Address}} >> /home/runner/.ssh/known_hosts
 
